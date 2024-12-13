@@ -106,6 +106,33 @@ def calculate_indicators(data, config=None):
 
     return data
 
+def recalculate_indicators(data):
+    """
+    Recalculate MACD, Signal Line, and other missing indicators if not present.
+
+    Parameters:
+        data (pd.DataFrame): Raw or partially processed stock data.
+
+    Returns:
+        pd.DataFrame: Data with recalculated indicators.
+    """
+    if 'MACD' not in data.columns or data['MACD'].isnull().all():
+        macd = ta.macd(data['Close'], fast=12, slow=26, signal=9)
+        data['MACD'] = macd['MACD_12_26_9']
+        data['Signal_Line'] = macd['MACDs_12_26_9']
+        data['MACD_Histogram'] = macd['MACDh_12_26_9']
+
+    if 'RSI' not in data.columns or data['RSI'].isnull().all():
+        data['RSI'] = ta.rsi(data['Close'], length=14)
+
+    if 'Upper_Band' not in data.columns or data['Upper_Band'].isnull().all():
+        bbands = ta.bbands(data['Close'], length=20, nbdevup=2, nbdevdn=2)
+        data['Upper_Band'] = bbands['BBU_20_2.0']
+        data['Middle_Band'] = bbands['BBM_20_2.0']
+        data['Lower_Band'] = bbands['BBL_20_2.0']
+
+    return data
+
 def process_downloaded_data(symbols, folder="data/raw/yahoo", output_folder="data/processed/yahoo", config=None):
     """
     Process downloaded stock data: Clean, calculate indicators, and save results.
@@ -138,7 +165,7 @@ def process_downloaded_data(symbols, folder="data/raw/yahoo", output_folder="dat
 
             # Calculate indicators
             data = calculate_indicators(data, config)
-
+            data=recalculate_indicators(data)
             # Save processed data
             output_path = os.path.join(output_folder, f"{symbol}.csv")
             data.to_csv(output_path, index=True)

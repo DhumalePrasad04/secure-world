@@ -194,6 +194,3 @@ if __name__ == "__main__":
                 save_data(data, symbol, folder=config["folder"])
         except Exception as e:
             print(f"Error while processing {source.capitalize()}: {e}")
-
-
-

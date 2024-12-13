@@ -160,7 +160,7 @@ def process_and_train_all_symbols(symbols, data_folder="D:\programming\secure wo
         # Evaluate and visualize
         print(f"Evaluating Lorentzian classifier for {symbol}...")
         accuracy, y_pred = evaluate_classifier(classifier, X_test, y_test)
-        visualize_predictions(y_test, y_pred, f"Lorentzian Predictions for {symbol}")
+
 
     print("\nAll symbols processed and classifiers trained!")
 
