@@ -10,6 +10,60 @@ from datetime import datetime, timedelta
 API_KEY = "zdk1cDqdialHsvHM1V36LNsioCAuQ22w"  # Replace with your Polygon.io API key
 BASE_URL = "https://api.polygon.io/v2/aggs/ticker"
 
+companies = {
+    "Apple Inc.": "AAPL",
+    "Microsoft Corporation": "MSFT",
+    "Amazon.com Inc.": "AMZN",
+    "Alphabet Inc. (Google)": "GOOGL",
+    "Meta Platforms Inc. (Facebook)": "META",
+    "Tesla Inc.": "TSLA",
+    "Berkshire Hathaway Inc.": "BRK.B",
+    "Johnson & Johnson": "JNJ",
+    "Visa Inc.": "V",
+    "Procter & Gamble Co.": "PG",
+    "NVIDIA Corporation": "NVDA",
+    "JPMorgan Chase & Co.": "JPM",
+    "UnitedHealth Group Incorporated": "UNH",
+    "Walt Disney Company": "DIS",
+    "Home Depot Inc.": "HD",
+    "Pfizer Inc.": "PFE",
+    "Exxon Mobil Corporation": "XOM",
+    "Chevron Corporation": "CVX",
+    "Coca-Cola Company": "KO",
+    "PepsiCo Inc.": "PEP",
+    "McDonald's Corporation": "MCD",
+    "Nike Inc.": "NKE",
+    "Intel Corporation": "INTC",
+    "AbbVie Inc.": "ABBV",
+    "Verizon Communications Inc.": "VZ",
+    "AT&T Inc.": "T",
+    "IBM Corporation": "IBM",
+    "Caterpillar Inc.": "CAT",
+    "Lockheed Martin Corporation": "LMT",
+    "Bristol-Myers Squibb Company": "BMY",
+    "Goldman Sachs Group Inc.": "GS",
+    "Tesla Inc.": "TSLA",
+    "Wells Fargo & Co.": "WFC",
+    "Morgan Stanley": "MS",
+    "Salesforce Inc.": "CRM",
+    "The Boeing Company": "BA",
+    "Oracle Corporation": "ORCL",
+    "American Express Company": "AXP",
+    "Walmart Inc.": "WMT",
+    "Intel Corporation": "INTC",
+    "3M Company": "MMM",
+    "Starbucks Corporation": "SBUX",
+    "General Electric Company": "GE",
+    "Target Corporation": "TGT",
+    "The Kraft Heinz Company": "KHC",
+    "Raytheon Technologies Corporation": "RTX",
+    "Citigroup Inc.": "C",
+    "Honeywell International Inc.": "HON",
+    "General Motors Company": "GM",
+    "Bristol Myers Squibb": "BMY"
+}
+
+
 # Function to fetch stock data using requests module
 def fetch_stock_data(ticker, from_date=None, to_date=None):
     """
@@ -125,13 +179,17 @@ def main():
     st.title("Stock Dashboard with Technical Indicators")
     st.sidebar.header("Configuration")
 
-    ticker = st.sidebar.text_input("Enter Stock Ticker (e.g., AAPL, MSFT):", value="AAPL")
+    ticker = st.sidebar.selectbox("Select Stock", list(companies.keys()), index=0)
+
+    # Date Range Inputs
     from_date = st.sidebar.date_input("Start Date", value=datetime.today() - timedelta(days=30))
     to_date = st.sidebar.date_input("End Date", value=datetime.today())
 
     if st.sidebar.button("Fetch Data"):
         st.write(f"Fetching data for {ticker} from {from_date} to {to_date}...")
-        data = fetch_stock_data(ticker, from_date=str(from_date), to_date=str(to_date))
+        ticker_symbol = companies[ticker]  # Get the ticker symbol from the dictionary
+        data = fetch_stock_data(ticker_symbol, from_date=str(from_date), to_date=str(to_date))
+
 
         if not data.empty:
             data = calculate_rsi(data)
