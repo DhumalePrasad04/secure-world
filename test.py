@@ -11,7 +11,7 @@ from flask import Flask, jsonify
 
 
 # Polygon API Configuration
-API_KEY = "zdk1cDqdialHsvHM1V36LNsioCAuQ22w"  # Replace with your Polygon.io API key
+API_KEY = ""  # Replace with your Polygon.io API key
 BASE_URL = "https://api.polygon.io/v2/aggs/ticker"
 
 companies = {
